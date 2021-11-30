@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.mapper.InvoiceMapper">
+	<insert id="purchace">
+		insert into tbl_invoice 
+		(invoice_id, invoice_name, invoice_password, invoice_address, invoice_detail_addr,
+			invoice_mobile_phone, invoice_number, product, price, quantity, total, coupon, coupon_use)
+		values(
+			#{invoice_id}, #{invoice_name}, #{invoice_password}, #{invoice_address}, #{invoice_detail_addr},
+			#{invoice_mobile_phone}, #{invoice_number}, #{product}, #{price}, #{quantity}, #{total}, #{coupon, jdbcType=VARCHAR}, #{coupon_use})
+		
+	</insert>
+	
+	<select id="getInvoiceById" resultType="com.green.vo.InvoiceVO" >
+	
+		select * from tbl_invoice where invoice_id=#{invoice_id}
+	</select>
+	
+	<delete id="remove" >
+		delete from tbl_invoice where invoice_number = #{invoice_number}
+	</delete>
+
+
+
+</mapper>

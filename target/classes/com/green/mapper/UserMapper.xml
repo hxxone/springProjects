@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.mapper.UserMapper">
+	<insert id="signUp">
+		<selectKey keyProperty="user_id" order="BEFORE" resultType="long">
+			select seq_user.nextval from dual 
+		</selectKey>
+		insert into tbl_user(user_id, user_name, user_password, user_address, user_detail_addr, user_resident, telephone, mobile_phone)
+			values( #{user_id},  #{user_name}, #{user_password}, #{user_address}, #{user_detail_addr}, #{user_resident}, #{telephone, jdbcType=VARCHAR}, #{mobile_phone} )
+	</insert>
+	
+	<select id="getAllUser" resultType="com.green.vo.UserVO">
+		select * from tbl_user
+	</select>
+	
+	<select id="getUser" resultType="com.green.vo.UserVO">
+		select * from tbl_user where user_id=#{user_id}
+	</select>
+
+	
+
+
+</mapper>
