@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.mapper.LoanMapper">
+
+	<insert id="getloan">
+		insert into tbl_loan(loan_no, loan_name, loan_total, loan_balance) 
+			values(seq_loan.nextval, #{loan_name}, #{loan_total}, #{loan_balance} )
+	</insert>
+	
+	<select id="getList" resultType="com.green.vo.LoanVO">
+		select * from tbl_loan where loan_name = #{loan_name} order by loan_no
+	</select>
+	
+	<insert id="borrow">
+		insert into tbl_loan(loan_no, loan_name, loan_total, loan_fee, loan_balance)
+			 values(seq_loan.nextval, #{loan_name},#{loan_total}, #{loan_fee}, #{loan_balance} )
+	</insert>
+	
+	<select id="getBalanceByName" resultType="com.green.vo.LoanVO">
+		select loan_balance, loan_total from tbl_loan where loan_no =
+    		(select max(loan_no) from tbl_loan where loan_name=#{loan_name}) order by loan_no
+	</select>
+	
+	
+</mapper>

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.mapper.FreeMapper">
+	
+	<insert id="depositAndWithdrawal">
+		<selectKey keyProperty="free_no" order="BEFORE" resultType="long">
+			select seq_free.nextval from dual 
+		</selectKey>
+		
+		insert into tbl_free (free_no, free_name, free_password, free_serial, 
+					free_deposit, free_withdrawal, free_balance) 
+    		values( #{free_no} , #{free_name}, #{free_password}, 
+    				#{free_serial}, #{free_deposit}, #{free_withdrawal} , #{free_balance})
+	</insert>
+	
+	<select id="getListBySerial" resultType="com.green.vo.FreeVO">
+		select * from tbl_free where free_serial=#{free_serial} order by free_no
+	</select>
+	
+	<select id="getBalance" resultType="com.green.vo.FreeVO">
+		select free_balance from tbl_free where free_no = 
+    		(select max(free_no) from tbl_free where free_serial=#{free_serial})
+	</select>
+	
+	
+	
+	
+	<!-- <insert id="depositAndWithdrawal">
+		insert into tbl_free (free_no, free_name, free_password, free_serial, free_deposit, free_withdrawal, free_balance, loan) 
+    		values( seq_free.nextval, #{free_name}, #{free_password}, #{free_serial}, #{free_deposit}, #{free_withdrawal}, #{free_balance}, #{loan})
+	</insert> -->
+	<!-- 
+	<insert id="depositAndWithdrawal">
+		insert into tbl_free (free_no, free_name, free_password, free_serial, free_deposit, free_withdrawal, free_balance, loan) 
+    		values( seq_free.nextval, #{free_name}, #{free_password}, #{free_serial}, #{free_deposit}, #{free_withdrawal}, #{free_balance}, #{loan})
+	</insert>  -->
+	
+	
+	<insert id="signUp">
+		insert into tbl_free (free_no, free_name, free_password, free_serial) 
+			values(seq_free.nextval, #{free_name}, #{free_password}, #{free_serial})
+	</insert>
+	
+	<select id="bankBook" resultType="com.green.vo.FreeVO">
+		select * from tbl_free where free_name=#{free_name} order by free_no
+	</select>
+	
+	<select id="selectAll" resultType="com.green.vo.FreeVO">
+		select * from tbl_free order by free_no
+	</select>
+	
+	<select id="getNameList" resultType="com.green.vo.FreeVO">
+		select distinct free_name from tbl_free
+	</select>
+	
+	<insert id="getSerial">
+		update tbl_free set free_serial=#{free_serial} where free_name=#{free_name}
+	</insert>
+	
+	<insert id="test">
+		insert into tbl_free (free_no, free_name, free_password, free_serial)
+			values(seq_free.nextval, #{free_name}, #{free_password}, #{free_serial})
+	</insert>
+	
+	
+	<!-- <update id="updateBalance">
+		update tbl_free set free_balance =#{free_balance} where free_no=#{free_no}
+	</update>
+	
+ -->
+ 	<update id="loan">
+		update tbl_free set loan = case 
+        	when free_balance>=500 then 'Y'
+        	else 'N'
+    		end
+    		where free_no=#{free_no}
+	</update>
+	
+	
+	<select id="balancePerSerial" resultType="com.green.vo.FreeVO">
+		select f.free_name, f.free_password, f.free_serial, f.free_balance, f.free_no 
+			from tbl_free f
+    		inner join (select max(free_no) as free_no, free_serial from tbl_free group by free_serial) u
+    		on f.free_no = u.free_no
+   			where free_name= #{free_name} order by free_no
+	</select>
+	
+	
+	<select id="getSerialByName" resultType="com.green.vo.FreeVO">
+		select distinct free_serial, free_name, free_password from tbl_free where free_name=#{free_name}
+	</select>
+	
+	
+	<select id="checkAccount" resultType="com.green.vo.FreeVO">
+		select * from tbl_free where free_no=#{free_no}
+	</select>
+	<select id="getLatestNo" resultType="long">
+		select max(free_no) from tbl_free where free_serial=#{free_serial} 
+	</select>
+
+<!-- 
+	<insert id="withdrwal">
+		insert into tbl_free(free_name, free_password, free_serial, free_withdrawal)
+			values( seq_free.nextval, #{free_name}, #{free_password}, #{free_serial}, #{free_withdrawal})
+		
+	</insert> -->
+	<!-- 
+	<update id="updateBalance">
+		update tbl_free set free_balance =#{free_balance} where free_no=#{free_no}
+	</update>
+	 -->
+	<!-- <update id="loan">
+		update tbl_free set loan = case 
+        	when free_balance>=5 then 'y'
+        	else 'n'
+    		end
+    		where free_no=#{free_no}
+	</update> -->
+	
+	
+	
+	
+	 
+	<!-- <select id="getHistory" resultType="com.green.vo.FreeVO">
+		select free_name, free_serial, free_deposit, free_withdrawal, free_balance 
+			from 
+            (select * from tbl_free where free_serial=#{free_serial} order by free_no) 
+            where rownum <=10
+	</select> -->
+	 
+</mapper>
